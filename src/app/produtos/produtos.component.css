@@ -349,3 +349,16 @@ tbody tr:last-child td {
 .botao-remover:hover {
   background: #b91c1c;
 }
+.botao-editar {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.botao-editar:hover {
+  background: #1d4ed8;
+}

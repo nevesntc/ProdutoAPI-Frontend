@@ -17,7 +17,8 @@
       <div class="titulo-formulario">
         <div>
           <span class="etiqueta">Novo registro</span>
-          <h2>Cadastrar produto</h2>
+        <h2>
+    {{ produtoEditandoId ? 'Editar produto' : 'Cadastrar produto' }}</h2>
         </div>
       </div>
 
@@ -62,10 +63,24 @@
           min="0"
         />
       </div>
+    <button type="submit" [disabled]="salvando">
+    {{
+        salvando
+        ? 'Salvando...'
+        : produtoEditandoId
+            ? 'Atualizar produto'
+            : 'Cadastrar produto'
+    }}
+    </button>
 
-      <button type="submit" [disabled]="salvando">
-        {{ salvando ? 'Salvando...' : 'Cadastrar produto' }}
-      </button>
+    <button
+    *ngIf="produtoEditandoId"
+    type="button"
+    class="botao-secundario"
+    (click)="cancelarEdicao()"
+    >
+    Cancelar edição
+    </button>
     </form>
   </section>
 
@@ -119,12 +134,21 @@
             <td>{{ produto.preco | currency:'BRL' }}</td>
             <td>{{ produto.quantidadeEstoque }}</td>
             <td>
-                <button
-                    type="button"
-                    class="botao-remover"
-                    (click)="removerProduto(produto.id)">
-                    Remover
-                </button>
+            <button
+                type="button"
+                class="botao-editar"
+                (click)="editarProduto(produto)"
+            >
+                Editar
+            </button>
+
+            <button
+                type="button"
+                class="botao-remover"
+                (click)="removerProduto(produto.id)"
+            >
+                Remover
+            </button>
             </td>
                 <td>
               <span class="status" [class.inativo]="!produto.ativo">
