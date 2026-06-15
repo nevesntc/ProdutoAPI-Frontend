@@ -19,4 +19,8 @@ export class ProdutoService { // Serviço para interagir com a API de produtos
   criar(produto: CreateProdutoRequest): Observable<Produto> { // Método para criar um novo produto, recebe um CreateProdutoRequest e retorna um Observable de Produto criado
     return this.http.post<Produto>(this.apiUrl, produto); // Envia uma requisição POST para a API com os dados do produto a ser criado
   }
+  
+  remover(id: number): Observable<void> { // Método para remover um produto, recebe o ID do produto a ser removido e retorna um Observable de void
+    return this.http.delete<void>(`${this.apiUrl}/${id}`); // Envia uma requisição DELETE para a API com o ID do produto a ser removido
+  }
 }

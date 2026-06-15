@@ -1,57 +1,73 @@
 <div class="container">
-  <h1>Produtos</h1>
-
-  <p>Lista de produtos disponíveis.</p>
-
-  <form class="formulario" (ngSubmit)="salvarProduto()">
-    <h2>Cadastrar Produto</h2>
-
+  <header class="cabecalho">
     <div>
-      <label>Nome</label>
-      <input
-        type="text"
-        name="nome"
-        [(ngModel)]="novoProduto.nome"
-        required
-      />
+      <span class="etiqueta">Painel administrativo</span>
+      <h1>Gest&atilde;o de Produtos</h1>
+      <p>Cadastro, pre&ccedil;os e estoque em uma tela simples de gerenciamento.</p>
     </div>
 
-    <div>
-      <label>Descrição</label>
-      <input
-        type="text"
-        name="descricao"
-        [(ngModel)]="novoProduto.descricao"
-      />
+    <div class="resumo">
+      <strong>{{ produtos.length }}</strong>
+      <span>produtos ativos</span>
     </div>
+  </header>
 
-    <div>
-      <label>Preço</label>
-      <input
-        type="number"
-        name="preco"
-        [(ngModel)]="novoProduto.preco"
-        required
-        min="0"
-        step="0.01"
-      />
-    </div>
+  <section class="painel">
+    <form class="formulario" (ngSubmit)="salvarProduto()">
+      <div class="titulo-formulario">
+        <div>
+          <span class="etiqueta">Novo registro</span>
+          <h2>Cadastrar produto</h2>
+        </div>
+      </div>
 
-    <div>
-      <label>Quantidade em estoque</label>
-      <input
-        type="number"
-        name="quantidadeEstoque"
-        [(ngModel)]="novoProduto.quantidadeEstoque"
-        required
-        min="0"
-      />
-    </div>
+      <div>
+        <label>Nome</label>
+        <input
+          type="text"
+          name="nome"
+          [(ngModel)]="novoProduto.nome"
+          required
+        />
+      </div>
 
-    <button type="submit" [disabled]="salvando">
-      {{ salvando ? 'Salvando...' : 'Cadastrar' }}
-    </button>
-  </form>
+      <div>
+        <label>Descri&ccedil;&atilde;o</label>
+        <input
+          type="text"
+          name="descricao"
+          [(ngModel)]="novoProduto.descricao"
+        />
+      </div>
+
+      <div>
+        <label>Pre&ccedil;o</label>
+        <input
+          type="number"
+          name="preco"
+          [(ngModel)]="novoProduto.preco"
+          required
+          min="0"
+          step="0.01"
+        />
+      </div>
+
+      <div>
+        <label>Quantidade em estoque</label>
+        <input
+          type="number"
+          name="quantidadeEstoque"
+          [(ngModel)]="novoProduto.quantidadeEstoque"
+          required
+          min="0"
+        />
+      </div>
+
+      <button type="submit" [disabled]="salvando">
+        {{ salvando ? 'Salvando...' : 'Cadastrar produto' }}
+      </button>
+    </form>
+  </section>
 
   <p *ngIf="mensagem" class="sucesso">
     {{ mensagem }}
@@ -61,39 +77,64 @@
     {{ erro }}
   </p>
 
-  <button type="button" (click)="carregarProdutos()">
-    Atualizar Lista
-  </button>
+  <section class="painel lista">
+    <div class="barra-lista">
+      <div>
+        <span class="etiqueta">Cat&aacute;logo</span>
+        <h2>Produtos cadastrados</h2>
+      </div>
 
-  <p *ngIf="carregando && produtos.length === 0">
-    Carregando produtos...
-  </p>
+      <button type="button" class="botao-secundario" (click)="carregarProdutos()">
+        Atualizar lista
+      </button>
+    </div>
 
-  <p *ngIf="!carregando && produtos.length === 0 && !erro">
-    Nenhum produto cadastrado.
-  </p>
+    <p *ngIf="carregando && produtos.length === 0" class="carregando">
+      Carregando produtos...
+    </p>
 
-  <table *ngIf="produtos.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Descrição</th>
-        <th>Preço</th>
-        <th>Estoque</th>
-        <th>Ativo</th>
-      </tr>
-    </thead>
+    <p *ngIf="!carregando && produtos.length === 0 && !erro" class="vazio">
+      Nenhum produto cadastrado.
+    </p>
 
-    <tbody>
-      <tr *ngFor="let produto of produtos">
-        <td>{{ produto.id }}</td>
-        <td>{{ produto.nome }}</td>
-        <td>{{ produto.descricao }}</td>
-        <td>{{ produto.preco | currency:'BRL' }}</td>
-        <td>{{ produto.quantidadeEstoque }}</td>
-        <td>{{ produto.ativo ? 'Sim' : 'Não' }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <div class="tabela-container" *ngIf="produtos.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Descri&ccedil;&atilde;o</th>
+            <th>Pre&ccedil;o</th>
+            <th>Estoque</th>
+            <th>Ativo</th>
+            <th>A&ccedil;&otilde;es</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let produto of produtos">
+            <td>{{ produto.id }}</td>
+            <td>{{ produto.nome }}</td>
+            <td>{{ produto.descricao }}</td>
+            <td>{{ produto.preco | currency:'BRL' }}</td>
+            <td>{{ produto.quantidadeEstoque }}</td>
+            <td>
+                <button
+                    type="button"
+                    class="botao-remover"
+                    (click)="removerProduto(produto.id)">
+                    Remover
+                </button>
+            </td>
+                <td>
+              <span class="status" [class.inativo]="!produto.ativo">
+                <ng-container *ngIf="produto.ativo; else produtoInativo">Sim</ng-container>
+                <ng-template #produtoInativo>N&atilde;o</ng-template>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </div>

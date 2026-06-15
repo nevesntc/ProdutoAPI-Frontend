@@ -62,6 +62,30 @@ export class ProdutosComponent implements OnInit {
       });
   }
 
+  removerProduto(id: number): void {
+
+    const confirmar = confirm('Tem certeza que deseja remover este produto?');
+
+    if (!confirmar) {
+      return;
+    }
+    this.erro = '';
+    this.mensagem = '';
+    
+    this.produtoService.remover(id)
+      .pipe(timeout(8000))
+      .subscribe({
+        next: () => {
+          this.mensagem = 'Produto removido com sucesso!';
+          this.carregarProdutos();
+        },
+        error: (erro) => {
+          console.error('Erro ao remover produto:', erro);
+          this.erro = 'Erro ao remover produto.';
+        }
+      });
+  }
+
   salvarProduto(): void {
     this.salvando = true;
     this.erro = '';
