@@ -3,6 +3,64 @@
 
   <p>Lista de produtos disponíveis.</p>
 
+  <form class="formulario" (ngSubmit)="salvarProduto()">
+    <h2>Cadastrar Produto</h2>
+
+    <div>
+      <label>Nome</label>
+      <input
+        type="text"
+        name="nome"
+        [(ngModel)]="novoProduto.nome"
+        required
+      />
+    </div>
+
+    <div>
+      <label>Descrição</label>
+      <input
+        type="text"
+        name="descricao"
+        [(ngModel)]="novoProduto.descricao"
+      />
+    </div>
+
+    <div>
+      <label>Preço</label>
+      <input
+        type="number"
+        name="preco"
+        [(ngModel)]="novoProduto.preco"
+        required
+        min="0"
+        step="0.01"
+      />
+    </div>
+
+    <div>
+      <label>Quantidade em estoque</label>
+      <input
+        type="number"
+        name="quantidadeEstoque"
+        [(ngModel)]="novoProduto.quantidadeEstoque"
+        required
+        min="0"
+      />
+    </div>
+
+    <button type="submit" [disabled]="salvando">
+      {{ salvando ? 'Salvando...' : 'Cadastrar' }}
+    </button>
+  </form>
+
+  <p *ngIf="mensagem" class="sucesso">
+    {{ mensagem }}
+  </p>
+
+  <p *ngIf="erro" class="erro">
+    {{ erro }}
+  </p>
+
   <button type="button" (click)="carregarProdutos()">
     Atualizar Lista
   </button>
@@ -11,8 +69,8 @@
     Carregando produtos...
   </p>
 
-  <p *ngIf="erro" class="erro">
-    {{ erro }}
+  <p *ngIf="!carregando && produtos.length === 0 && !erro">
+    Nenhum produto cadastrado.
   </p>
 
   <table *ngIf="produtos.length > 0">
@@ -32,14 +90,10 @@
         <td>{{ produto.id }}</td>
         <td>{{ produto.nome }}</td>
         <td>{{ produto.descricao }}</td>
-        <td>{{ produto.preco }}</td>
+        <td>{{ produto.preco | currency:'BRL' }}</td>
         <td>{{ produto.quantidadeEstoque }}</td>
         <td>{{ produto.ativo ? 'Sim' : 'Não' }}</td>
       </tr>
     </tbody>
   </table>
-
-  <p *ngIf="!carregando && produtos.length === 0 && !erro">
-    Nenhum produto cadastrado.
-  </p>
 </div>

@@ -1,38 +1,104 @@
 :host {
   display: block;
   min-height: 100vh;
-  padding: 32px 16px;
-  background:
-    radial-gradient(circle at top left, rgba(20, 184, 166, 0.16), transparent 30%),
-    linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+  padding: 36px 18px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
   color: #1f2937;
+  background:
+    radial-gradient(circle at top left, rgba(20, 184, 166, 0.16), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.12), transparent 26%),
+    linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 .container {
-  max-width: 960px;
+  width: min(100%, 1120px);
   margin: 0 auto;
-  padding: 28px;
-  font-family: Arial, sans-serif;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
   animation: aparecer 0.45s ease;
 }
 
 h1 {
   margin: 0 0 8px;
   color: #111827;
-  font-size: 32px;
+  font-size: 34px;
 }
 
 .container > p {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   color: #64748b;
 }
 
+.formulario {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+  margin: 24px 0 18px;
+  padding: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.12);
+}
+
+.formulario::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb, #14b8a6, #f59e0b);
+}
+
+.formulario h2 {
+  grid-column: 1 / -1;
+  margin: 0 0 4px;
+  color: #0f172a;
+  font-size: 22px;
+}
+
+.formulario div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.formulario label {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.formulario input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 13px;
+  color: #111827;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.formulario input:focus {
+  background: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
+}
+
 button {
-  margin: 16px 0 20px;
+  max-width: 100%;
+  margin: 14px 0 20px;
   padding: 11px 18px;
   cursor: pointer;
   color: #ffffff;
@@ -44,14 +110,46 @@ button {
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
-button:hover {
+.formulario button {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-bottom: 0;
+}
+
+button:hover:not(:disabled) {
   transform: translateY(-2px);
   filter: brightness(1.04);
   box-shadow: 0 12px 24px rgba(20, 184, 166, 0.28);
 }
 
-button:active {
+button:active:not(:disabled) {
   transform: translateY(0);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.erro,
+.sucesso {
+  padding: 12px 14px;
+  font-weight: 700;
+  border-radius: 8px;
+  animation: subir 0.3s ease;
+}
+
+.erro {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.sucesso {
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
 }
 
 table {
@@ -59,10 +157,12 @@ table {
   overflow: hidden;
   border-collapse: separate;
   border-spacing: 0;
+  table-layout: fixed;
   margin-top: 8px;
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 10px;
+  border-radius: 8px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
   animation: subir 0.35s ease;
 }
 
@@ -82,10 +182,15 @@ th {
 
 td {
   color: #374151;
+  overflow-wrap: anywhere;
 }
 
 tbody tr {
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f8fafc;
 }
 
 tbody tr:hover {
@@ -94,15 +199,6 @@ tbody tr:hover {
 
 tbody tr:last-child td {
   border-bottom: 0;
-}
-
-.erro {
-  padding: 12px 14px;
-  color: #b91c1c;
-  font-weight: bold;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  border-radius: 8px;
 }
 
 @keyframes aparecer {
@@ -130,16 +226,68 @@ tbody tr:last-child td {
 }
 
 @media (max-width: 700px) {
-  .container {
+  :host {
+    padding: 20px 12px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .formulario {
+    grid-template-columns: 1fr;
+    gap: 14px;
     padding: 20px;
   }
 
   table {
     display: block;
     overflow-x: auto;
+    table-layout: auto;
+    white-space: nowrap;
+  }
+
+  th,
+  td {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  :host {
+    padding: 14px 10px;
   }
 
   h1 {
-    font-size: 26px;
+    font-size: 25px;
+  }
+
+  .container > p {
+    font-size: 14px;
+  }
+
+  .formulario {
+    margin-top: 18px;
+    padding: 16px;
+  }
+
+  .formulario h2 {
+    font-size: 19px;
+  }
+
+  button,
+  .formulario button {
+    width: 100%;
+    justify-self: stretch;
+  }
+}
+
+@media (min-width: 1280px) {
+  :host {
+    padding-top: 48px;
+  }
+
+  .formulario {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
