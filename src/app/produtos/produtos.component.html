@@ -1,0 +1,45 @@
+<div class="container">
+  <h1>Produtos</h1>
+
+  <p>Lista de produtos disponíveis.</p>
+
+  <button type="button" (click)="carregarProdutos()">
+    Atualizar Lista
+  </button>
+
+  <p *ngIf="carregando && produtos.length === 0">
+    Carregando produtos...
+  </p>
+
+  <p *ngIf="erro" class="erro">
+    {{ erro }}
+  </p>
+
+  <table *ngIf="produtos.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Preço</th>
+        <th>Estoque</th>
+        <th>Ativo</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let produto of produtos">
+        <td>{{ produto.id }}</td>
+        <td>{{ produto.nome }}</td>
+        <td>{{ produto.descricao }}</td>
+        <td>{{ produto.preco }}</td>
+        <td>{{ produto.quantidadeEstoque }}</td>
+        <td>{{ produto.ativo ? 'Sim' : 'Não' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!carregando && produtos.length === 0 && !erro">
+    Nenhum produto cadastrado.
+  </p>
+</div>
